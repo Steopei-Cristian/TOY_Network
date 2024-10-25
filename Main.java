@@ -2,6 +2,9 @@ import domain.User;
 import repo.file.FriendshipRepo;
 import repo.file.UserRepo;
 import service.NetworkService;
+import validator.PasswordValidator;
+import validator.StringLongValidator;
+import validator.Validator;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -31,6 +34,8 @@ public class Main {
             String username = reader.readLine();
             System.out.println("Insert password: ");
             String password = reader.readLine();
+            Validator<String> v = new PasswordValidator();
+            v.validate(password);
             network.addUser(username, password);
             System.out.println("User successfully added");
         } catch (Exception e) {
@@ -43,6 +48,8 @@ public class Main {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             System.out.println("Insert userId: ");
             String id = reader.readLine();
+            Validator<String> v = new StringLongValidator();
+            v.validate(id);
             network.removeUser(Long.valueOf(id));
             System.out.println("User successfully deleted");
         } catch (Exception e) {
@@ -57,6 +64,9 @@ public class Main {
             String id1 = reader.readLine();
             System.out.println("Insert id2: ");
             String id2 = reader.readLine();
+            Validator<String> v = new StringLongValidator();
+            v.validate(id1);
+            v.validate(id2);
             network.addFriend(Long.valueOf(id1), Long.valueOf(id2));
             System.out.println("The users are now friends");
         } catch (Exception e) {
@@ -71,6 +81,9 @@ public class Main {
             String id1 = reader.readLine();
             System.out.println("Insert id2: ");
             String id2 = reader.readLine();
+            Validator<String> v = new StringLongValidator();
+            v.validate(id1);
+            v.validate(id2);
             network.removeFriend(Long.valueOf(id1), Long.valueOf(id2));
             System.out.println("The users are not friends anymore");
         } catch (Exception e) {
@@ -83,7 +96,7 @@ public class Main {
     }
 
     private static void handleBiggestGroup(NetworkService network) {
-        System.out.println("To be continued..");
+        network.maxComp().forEach(System.out::println);
     }
 
     public static void main(String[] args) {

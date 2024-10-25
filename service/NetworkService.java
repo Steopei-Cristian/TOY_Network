@@ -72,4 +72,8 @@ public class NetworkService implements Service {
         Friendship newFr = new Friendship(id, idUser, idFriend);
         frRepo.add(newFr);
     }
+
+    public List<User> maxComp() {
+        return network.maxComp();
+    }
 }

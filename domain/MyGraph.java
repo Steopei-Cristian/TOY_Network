@@ -9,6 +9,9 @@ public class MyGraph<ID extends Comparable<ID>, E extends Entity<ID>> {
     private Iterable<E> all;
     private int compCount;
 
+    private int maxCompSize;
+    private E maxCompHead;
+
     public MyGraph(Iterable<E> all, List<List<E>> links) {
         G = new HashMap<>();
         refresh(all, links);
@@ -42,6 +45,7 @@ public class MyGraph<ID extends Comparable<ID>, E extends Entity<ID>> {
 
     private void dfs(E node, List<E> seen) {
         seen.add(node);
+
         G.get(node).forEach(v -> {
             if(!seen.contains(v))
                 dfs(v, seen);
@@ -55,11 +59,25 @@ public class MyGraph<ID extends Comparable<ID>, E extends Entity<ID>> {
             // System.out.println(elem);
             if(!seen.contains(elem)) {
                 if(G.containsKey(elem)) {
+                    int prev = seen.size();
                     dfs(elem, seen);
+                    int post = seen.size();
+                    int size = post - prev;
+                    if(size > maxCompSize) {
+                        maxCompSize = size;
+                        maxCompHead = elem;
+                    }
                 }
                 compCount ++;
             }
         });
+    }
+
+    public List<E> maxComp(){
+        countComps();
+        List<E> res = new ArrayList<>();
+        dfs(maxCompHead, res);
+        return res;
     }
 
     public void unlink(E v1, E v2){
